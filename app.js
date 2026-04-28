@@ -143,17 +143,59 @@ const qtyMinusBtn = document.getElementById('qty-minus');
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
-    loadDatalist();
     renderItems();
     updateOnlineStatus();
+    
+    // Fechar sugestões ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!nameInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+            closeSuggestions();
+        }
+    });
 });
 
-function loadDatalist() {
-    const datalist = document.getElementById('product-suggestions');
-    datalist.innerHTML = PRODUCT_DATABASE.map(p => 
-        `<option value="${p.name}">${p.code}</option>`
-    ).join('');
+const suggestionsContainer = document.getElementById('suggestions-container');
+
+function showSuggestions(query) {
+    if (!query) {
+        closeSuggestions();
+        return;
+    }
+
+    const filtered = PRODUCT_DATABASE.filter(p => 
+        p.name.toLowerCase().includes(query.toLowerCase()) || 
+        p.code.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 10); // Limitar a 10 sugestões para performance
+
+    if (filtered.length === 0) {
+        closeSuggestions();
+        return;
+    }
+
+    suggestionsContainer.innerHTML = filtered.map(p => `
+        <div class="suggestion-item" onclick="selectProduct('${p.name}', '${p.code}')">
+            <div class="suggestion-info">
+                <span class="suggestion-name">${p.name}</span>
+                <span class="suggestion-code">Cód: ${p.code}</span>
+            </div>
+            <i data-lucide="arrow-up-left" class="suggestion-icon"></i>
+        </div>
+    `).join('');
+    
+    suggestionsContainer.classList.add('active');
+    lucide.createIcons();
 }
+
+function closeSuggestions() {
+    suggestionsContainer.classList.remove('active');
+}
+
+window.selectProduct = function(name, code) {
+    nameInput.value = name;
+    codeInput.value = code;
+    closeSuggestions();
+    qtyInput.focus();
+};
 
 // Event Listeners
 addItemBtn.addEventListener('click', addItem);
@@ -171,14 +213,14 @@ qtyMinusBtn.addEventListener('click', () => {
     }
 });
 
-// Detectar Mudança no Nome para Auto-Preencher Código
-nameInput.addEventListener('input', () => {
-    const name = nameInput.value.trim();
-    const product = PRODUCT_DATABASE.find(p => p.name === name);
-    if (product) {
-        codeInput.value = product.code;
-        qtyInput.focus(); // Se achou o produto, vai direto pra quantidade
-    }
+// Detectar Mudança no Nome para Mostrar Sugestões
+nameInput.addEventListener('input', (e) => {
+    showSuggestions(e.target.value.trim());
+});
+
+// Detectar Foco para Mostrar Sugestões se houver texto
+nameInput.addEventListener('focus', (e) => {
+    showSuggestions(e.target.value.trim());
 });
 
 // Detectar Enter no campo de Nome
