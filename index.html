@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Estoque Pro - Contagem Offline</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i data-lucide="package" class="icon-primary"></i>
+                    <h1>Estoque<span>Pro</span></h1>
+                </div>
+                <div class="status-badge" id="offline-status">
+                    <span class="dot"></span>
+                    <span class="status-text">Offline Ready</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="scan-section">
+                <div class="card">
+                    <div class="input-group">
+                        <label for="item-name">Descrição do Produto</label>
+                        <div class="input-with-icon">
+                            <i data-lucide="tag"></i>
+                            <input type="text" id="item-name" placeholder="Nome do produto ou novo item..." list="product-suggestions" autofocus>
+                            <datalist id="product-suggestions">
+                                <!-- Opções carregadas pelo JS -->
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="item-code">Código / SKU</label>
+                        <div class="input-with-icon">
+                            <i data-lucide="barcode"></i>
+                            <input type="text" id="item-code" placeholder="Código (se houver)">
+                        </div>
+                    </div>
+
+                    <div class="qty-control">
+                        <button type="button" class="btn-qty" id="qty-minus"><i data-lucide="minus"></i></button>
+                        <div class="qty-input">
+                            <input type="number" id="item-qty" value="1" min="1">
+                            <span>unid</span>
+                        </div>
+                        <button type="button" class="btn-qty" id="qty-plus"><i data-lucide="plus"></i></button>
+                    </div>
+
+                    <button class="btn-primary" id="add-item">
+                        <i data-lucide="plus-circle"></i>
+                        Adicionar à Contagem
+                    </button>
+                </div>
+            </section>
+
+            <section class="list-section">
+                <div class="section-header">
+                    <h2>Itens Contados (<span id="total-items">0</span>)</h2>
+                    <button class="btn-text" id="clear-list">Limpar Tudo</button>
+                </div>
+                
+                <div class="items-list" id="items-list">
+                    <!-- Itens serão inseridos aqui -->
+                    <div class="empty-state">
+                        <i data-lucide="clipboard-list"></i>
+                        <p>Nenhum item lançado ainda.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-actions">
+                <button class="btn-secondary" id="export-csv">
+                    <i data-lucide="file-spreadsheet"></i>
+                    Exportar CSV
+                </button>
+                <button class="btn-accent" id="export-excel">
+                    <i data-lucide="download"></i>
+                    Gerar Planilha
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Inicializa os ícones Lucide
+        lucide.createIcons();
+
+        // Registra o Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registrado!'))
+                    .catch(err => console.log('Erro ao registrar SW:', err));
+            });
+        }
+    </script>
+</body>
+</html>
