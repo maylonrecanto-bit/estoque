@@ -1,0 +1,9 @@
+node_modules/
+*.xlsx
+*.xls
+.DS_Store
+extracted_data.json
+debug.js
+extract.js
+extract_final.js
+package-lock.json
