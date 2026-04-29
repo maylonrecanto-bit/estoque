@@ -685,6 +685,7 @@ const totalItemsSpan = document.getElementById('total-items');
 const clearListBtn = document.getElementById('clear-list');
 const exportCsvBtn = document.getElementById('export-csv');
 const exportExcelBtn = document.getElementById('export-excel');
+const sendWhatsappBtn = document.getElementById('send-whatsapp');
 const qtyPlusBtn = document.getElementById('qty-plus');
 const qtyMinusBtn = document.getElementById('qty-minus');
 
@@ -749,6 +750,7 @@ addItemBtn.addEventListener('click', addItem);
 clearListBtn.addEventListener('click', clearItems);
 exportCsvBtn.addEventListener('click', exportToCSV);
 exportExcelBtn.addEventListener('click', exportToExcel);
+sendWhatsappBtn.addEventListener('click', sendToWhatsApp);
 
 qtyPlusBtn.addEventListener('click', () => {
     qtyInput.value = parseInt(qtyInput.value) + 1;
@@ -956,6 +958,30 @@ function exportToExcel() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Contagem");
 
     XLSX.writeFile(workbook, `contagem_estoque_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+function sendToWhatsApp() {
+    if (items.length === 0) return alert('Não há itens para enviar.');
+
+    let message = `📦 *CONTAGEM DE ESTOQUE*\n`;
+    message += `📅 Data: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n`;
+    message += `----------------------------\n\n`;
+
+    items.forEach((item, index) => {
+        message += `*${index + 1}. ${item.name}*\n`;
+        message += `   Cód: ${item.code}\n`;
+        message += `   Qtd: *${item.qty}* unid\n\n`;
+    });
+
+    message += `----------------------------\n`;
+    message += `*Total de Itens:* ${items.length}\n`;
+    message += `_Gerado por EstoquePro_`;
+
+    const phone = "5534991147905";
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
 }
 
 // Status Online/Offline
