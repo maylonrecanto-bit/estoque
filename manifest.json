@@ -1,6 +1,6 @@
 {
-  "name": "Estoque Pro Offline",
-  "short_name": "EstoquePro",
+  "name": "Estoque Rede Bombar",
+  "short_name": "RedeBombar",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0f172a",

@@ -1,4 +1,4 @@
-# Estoque Pro - Contagem Offline (PWA)
+# Estoque Rede Bombar - Contagem Offline (PWA)
 
 Sistema leve e eficiente para contagem de estoque, projetado para funcionar totalmente offline em dispositivos móveis. Ideal para inventários em locais sem conectividade estável.
 

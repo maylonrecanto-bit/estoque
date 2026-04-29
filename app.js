@@ -975,7 +975,7 @@ function sendToWhatsApp() {
 
     message += `----------------------------\n`;
     message += `*Total de Itens:* ${items.length}\n`;
-    message += `_Gerado por EstoquePro_`;
+    message += `_Gerado por Rede Bombar_`;
 
     const phone = "5534991147905";
     const encodedMessage = encodeURIComponent(message);
